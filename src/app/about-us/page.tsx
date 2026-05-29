@@ -1,4 +1,5 @@
 import { defineMetadata, getMetadataBase } from '@/lib/metadata'
+import Image from 'next/image'
 
 import AboutUs from '@/components/organisms/about-us/AboutUs'
 import ColorPallete from '@/components/organisms/about-us/ColorPallete'
@@ -6,6 +7,8 @@ import Hero from '@/components/organisms/about-us/Hero'
 import LogoPhilosophy from '@/components/organisms/about-us/LogoPhilosophy'
 import Mission from '@/components/organisms/about-us/Mission'
 import Vision from '@/components/organisms/about-us/Vision'
+
+import aboutUsBg from '@/assets/images/about-us/about-us-bg.webp'
 
 export const metadata = defineMetadata({
   title: 'Tentang Kami - Evastra',
@@ -37,20 +40,30 @@ export const metadata = defineMetadata({
       type: 'image/webp',
       alt: 'Tentang Kami - Evastra'
     }
-  }
+}
 })
 
-const page = () => {
+export default function AboutUsPage() {
   return (
-    <>
-      <Hero />
-      <AboutUs />
-      <LogoPhilosophy />
-      <ColorPallete />
-      <Vision />
-      <Mission />
-    </>
+    <main className="relative min-h-screen w-full flex flex-col overflow-hidden bg-blue-cs-40 z-0">
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
+        <Image
+          src={aboutUsBg}
+          alt="About Us Background"
+          fill
+          priority
+          className="object-cover object-top"
+        />
+      </div>
+
+      <>
+        <Hero />
+        <AboutUs />
+        <LogoPhilosophy />
+        <ColorPallete />
+        <Vision />
+        <Mission />
+      </>
+    </main>
   )
 }
-
-export default page

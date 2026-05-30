@@ -2,18 +2,16 @@ import React from 'react'
 
 const Mission = () => {
   return (
-    <section className="text-center py-16 px-4 relative w-full flex flex-col items-center mt-12 md:mt-20">
-      <h2 className="text-4xl md:text-5xl font-rubikone text-white mb-8 z-10 relative">
-        Our Mision
-      </h2>
-      
-      <div className="max-w-4xl mx-auto text-white text-base md:text-xl leading-relaxed space-y-6 z-10 relative">
+    <section className="relative mt-12 flex w-full flex-col items-center px-4 py-16 text-center md:mt-20">
+      <h2 className="font-rubikone relative z-10 mb-8 text-4xl text-white md:text-5xl">Our Mision</h2>
+
+      <div className="relative z-10 mx-auto max-w-4xl space-y-6 text-base leading-relaxed text-white md:text-xl">
         <p>
           Membangun lingkungan yang <span className="text-yellow-cs-20 font-bold">inklusif</span> dan{' '}
           <span className="text-yellow-cs-20 font-bold">supportif</span> berlandaskan{' '}
           <span className="text-yellow-cs-20 font-bold">rasa kepedulian</span>
         </p>
-        
+
         <p>
           Memberikan wadah <span className="text-yellow-cs-20 font-bold">kolaborasi</span> dan{' '}
           <span className="text-yellow-cs-20 font-bold">eksplorasi</span> untuk mengembangkan{' '}

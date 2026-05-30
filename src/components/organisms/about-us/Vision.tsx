@@ -1,16 +1,15 @@
 import Image from 'next/image'
 
 import Star from '@/components/atoms/icon/Star'
+
 import cloudIcon from '@/assets/images/icon/cloud.svg'
 
 const Vision = () => {
   return (
-    <section className="text-center py-16 px-4 relative w-full flex flex-col items-center">
-      <h2 className="text-4xl md:text-5xl font-rubikone text-white mb-8 z-10 relative">
-        Our Vision
-      </h2>
-      
-      <p className="max-w-4xl mx-auto text-white text-base md:text-xl leading-relaxed z-10 relative">
+    <section className="relative flex w-full flex-col items-center px-4 py-16 text-center">
+      <h2 className="font-rubikone relative z-10 mb-8 text-4xl text-white md:text-5xl">Our Vision</h2>
+
+      <p className="relative z-10 mx-auto max-w-4xl text-base leading-relaxed text-white md:text-xl">
         Mewujudkan Teknologi Informasi ITS angkatan 2025 sebagai{' '}
         <span className="text-yellow-cs-20 font-bold">ruang</span> untuk{' '}
         <span className="text-yellow-cs-20 font-bold">berkembang bersama</span> melalui{' '}
@@ -21,17 +20,17 @@ const Vision = () => {
       </p>
 
       {/* Cloud & Star Decoration Positioned between Vision and Mission */}
-      <div className="absolute -bottom-[30%] right-0 translate-x-[15%] md:translate-x-[0%] pointer-events-none z-0">
+      <div className="pointer-events-none absolute right-0 -bottom-[30%] z-0 translate-x-[15%] md:translate-x-[0%]">
         <div className="relative">
-          <Image 
-            src={cloudIcon} 
-            alt="Cloud decoration" 
-            width={400} 
-            height={150} 
-            className="w-[280px] md:w-[400px] h-auto object-contain opacity-90"
+          <Image
+            src={cloudIcon}
+            alt="Cloud decoration"
+            width={400}
+            height={150}
+            className="h-auto w-[280px] object-contain opacity-90 md:w-[400px]"
           />
-          <div className="absolute right-[10%] top-[5%] transform -translate-y-1/2">
-            <Star className="w-12 h-12 md:w-20 md:h-20 animate-pulse" />
+          <div className="absolute top-[5%] right-[10%] -translate-y-1/2 transform">
+            <Star className="h-12 w-12 animate-pulse md:h-20 md:w-20" />
           </div>
         </div>
       </div>

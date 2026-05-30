@@ -1,5 +1,6 @@
-import { defineMetadata, getMetadataBase } from '@/lib/metadata'
 import Image from 'next/image'
+
+import { defineMetadata, getMetadataBase } from '@/lib/metadata'
 
 import AboutUs from '@/components/organisms/about-us/AboutUs'
 import ColorPallete from '@/components/organisms/about-us/ColorPallete'
@@ -40,20 +41,14 @@ export const metadata = defineMetadata({
       type: 'image/webp',
       alt: 'Tentang Kami - Evastra'
     }
-}
+  }
 })
 
 export default function AboutUsPage() {
   return (
-    <main className="relative min-h-screen w-full flex flex-col overflow-hidden bg-blue-cs-40 z-0">
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
-        <Image
-          src={aboutUsBg}
-          alt="About Us Background"
-          fill
-          priority
-          className="object-cover object-top"
-        />
+    <main className="bg-blue-cs-40 relative z-0 flex min-h-screen w-full flex-col overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 -bottom-4 z-0 opacity-50">
+        <Image src={aboutUsBg} alt="About Us Background" fill priority className="object-cover object-top" />
       </div>
 
       <>

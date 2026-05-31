@@ -9,6 +9,8 @@ import MenfessCard from '../../molecules/MenfessCard'
 import type { MenfessRecord, MenfessReactionName } from '@/types/menfess'
 
 const ITEMS_PER_PAGE = 6
+const getReactionStateKey = (id: string, reaction: MenfessReactionName) =>
+  `menfess-reaction-state:${id}:${reaction}`
 
 const getPaginationItems = (
   currentPage: number,
@@ -54,6 +56,7 @@ const Menfess = () => {
   const [totalPages, setTotalPages] = useState(1)
   const [loading, setLoading] = useState(true)
   const [updatingReactionId, setUpdatingReactionId] = useState<string | null>(null)
+  const [reactionStates, setReactionStates] = useState<Record<string, Partial<Record<MenfessReactionName, boolean>>>>({})
 
   useEffect(() => {
     const loadMenfess = async () => {
@@ -84,11 +87,51 @@ const Menfess = () => {
     loadMenfess()
   }, [currentPage])
 
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    const nextStates: Record<string, Partial<Record<MenfessReactionName, boolean>>> = {}
+
+    items.forEach((item) => {
+      nextStates[item.id] = {
+        laugh: window.localStorage.getItem(getReactionStateKey(item.id, 'laugh')) === '1',
+        love: window.localStorage.getItem(getReactionStateKey(item.id, 'love')) === '1',
+        sad: window.localStorage.getItem(getReactionStateKey(item.id, 'sad')) === '1',
+        angry: window.localStorage.getItem(getReactionStateKey(item.id, 'angry')) === '1'
+      }
+    })
+
+    setReactionStates(nextStates)
+  }, [items])
+
+  const setReactionState = (id: string, reaction: MenfessReactionName, active: boolean) => {
+    if (typeof window !== 'undefined') {
+      const storageKey = getReactionStateKey(id, reaction)
+
+      if (active) {
+        window.localStorage.setItem(storageKey, '1')
+      } else {
+        window.localStorage.removeItem(storageKey)
+      }
+    }
+
+    setReactionStates((previousStates) => ({
+      ...previousStates,
+      [id]: {
+        ...previousStates[id],
+        [reaction]: active
+      }
+    }))
+  }
+
   const handleReactionClick = async (
     id: string | number,
     reaction: MenfessReactionName
   ) => {
     const targetId = String(id)
+    const isActive = Boolean(reactionStates[targetId]?.[reaction])
 
     setUpdatingReactionId(targetId)
     setItems((previousItems) =>
@@ -96,7 +139,7 @@ const Menfess = () => {
         item.id === targetId
           ? {
               ...item,
-              [reaction]: item[reaction] + 1
+              [reaction]: Math.max(0, item[reaction] + (isActive ? -1 : 1))
             }
           : item
       )
@@ -104,10 +147,12 @@ const Menfess = () => {
 
     const result = await updateMenfessReactionAction({
       id: targetId,
-      reaction
+      reaction,
+      delta: isActive ? -1 : 1
     })
 
     if (result.success && result.data) {
+      setReactionState(targetId, reaction, !isActive)
       setItems((previousItems) =>
         previousItems.map((item) =>
           item.id === targetId ? result.data! : item
@@ -168,6 +213,7 @@ const Menfess = () => {
                 onReactionClick={
                   updatingReactionId === data.id ? undefined : handleReactionClick
                 }
+                activeReactions={reactionStates[data.id]}
                 reactions={{
                   laugh: data.laugh ?? 0,
                   love: data.love ?? 0,

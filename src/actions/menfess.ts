@@ -21,6 +21,7 @@ type GetMenfessListActionParams = {
 type UpdateMenfessReactionActionParams = {
   id: string
   reaction: MenfessReactionName
+  delta: 1 | -1
 }
 
 const sanitizePage = (value?: number) => {
@@ -181,7 +182,15 @@ export async function updateMenfessReactionAction(
       }
     }
 
-    const nextReactionCount = (current[params.reaction] ?? 0) + 1
+    const nextReactionCount = Math.max(0, (current[params.reaction] ?? 0) + params.delta)
+
+    if (nextReactionCount === current[params.reaction] && params.delta === -1) {
+      return {
+        success: false,
+        message: 'Menfess reaction is already at zero.',
+        error: 'Reaction count cannot go below zero.'
+      }
+    }
 
     const { data, error } = await supabase
       .from('menfess')

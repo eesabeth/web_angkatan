@@ -24,6 +24,8 @@ const MemberPopup = ({ isOpen, onClose }: MemberPopupProps) => {
   const battleThemeRef = useRef<HTMLAudioElement | null>(null)
   const winJingleRef = useRef<HTMLAudioElement | null>(null)
   const [musicStarted, setMusicStarted] = useState(false)
+  const profileMusicRef = useRef<HTMLAudioElement | null>(null)
+const [bgmMuted, setBgmMuted] = useState(false)
 
 useEffect(() => {
   battleStartRef.current = new Audio('/assets/sounds/battle-start.mp3')
@@ -34,6 +36,10 @@ useEffect(() => {
 
   winJingleRef.current = new Audio('/assets/sounds/win-jingle.mp3')
   winJingleRef.current.volume = 0.7
+
+  profileMusicRef.current = new Audio('/assets/sounds/0605(3).mp3')
+  profileMusicRef.current.loop = true
+  profileMusicRef.current.volume = 1.0
 
   return () => {
     battleStartRef.current?.pause()
@@ -146,9 +152,12 @@ const startBattleMusic = async () => {
       }
 
       winJingleRef.current?.play()
-
       setTimeout(() => {
         setBattleWon(true)
+
+        profileMusicRef.current
+        ?.play()
+        .catch(err => console.error(err))
       }, 1000)
     } else if (distance <= 18) {
       setMessage('Wadooh, dikit lagi banh')
@@ -156,10 +165,24 @@ const startBattleMusic = async () => {
       setMessage('CUPU AH')
     }
   }
+
+  const toggleBgm = () => {
+    if (!profileMusicRef.current) return
+
+    if (bgmMuted) {
+      profileMusicRef.current.volume = 1.0
+    } else {
+      profileMusicRef.current.volume = 0
+    }
+
+    setBgmMuted(!bgmMuted)
+  }
+
   const closePopup = () => {
     battleStartRef.current?.pause()
     battleThemeRef.current?.pause()
     winJingleRef.current?.pause()
+    profileMusicRef.current?.pause()
 
     if (battleStartRef.current) {
       battleStartRef.current.currentTime = 0
@@ -171,6 +194,10 @@ const startBattleMusic = async () => {
 
     if (winJingleRef.current) {
       winJingleRef.current.currentTime = 0
+    }
+
+    if (profileMusicRef.current) {
+      profileMusicRef.current.currentTime = 0
     }
 
     setBattleWon(false)
@@ -222,10 +249,11 @@ const startBattleMusic = async () => {
 
           </div>
 
+          <div className="flex gap-3">
           <button
             onClick={handleAttack}
             className="
-              w-full
+              flex-1
               border-2
               border-white
               p-4
@@ -237,6 +265,22 @@ const startBattleMusic = async () => {
           >
             {attacking ? 'STOP!' : 'FIGHT'}
           </button>
+
+          <button
+            onClick={closePopup}
+            className="
+              px-6
+              border-2
+              border-red-500
+              text-red-500
+              font-bold
+              hover:bg-red-500
+              hover:text-white
+            "
+          >
+            MENYERAH?
+          </button>
+        </div>
 
         </div>
       </div>
@@ -309,6 +353,26 @@ const startBattleMusic = async () => {
           />
         </div>
 
+        <div className="mt-4 flex gap-2">
+          <button
+            onClick={toggleBgm}
+            className="
+              rounded-lg
+              border
+              border-white/30
+              bg-black/30
+              px-4
+              py-2
+              text-sm
+              font-semibold
+              backdrop-blur-sm
+              hover:bg-white/10
+            "
+          >
+            {bgmMuted ? '🔇 Ambience OFF' : '🔊 Ambience ON'}
+          </button>
+        </div>
+
         {/* NAMA */}
         <div className="pr-10">
           <h2 className="text-4xl font-black drop-shadow-lg">
@@ -356,7 +420,7 @@ const startBattleMusic = async () => {
               <br />
               4. Suka crossdress
               <br />
-              5. Iya, aku yang gambar bgnya. Jangan lupa diputar lagunya juga
+              5. Iya, aku yang gambar bgnya
             </p>
           </div>
         </div>
@@ -368,10 +432,10 @@ const startBattleMusic = async () => {
           </p>
 
           <p className="my-2 font-semibold">
-            私は雨
+            お気に召すまま
           </p>
 
-          <SpotifyEmbed spotifyUrl="https://open.spotify.com/track/3s5sFHV8VTzg0CSXy3gz5y?si=4ef91bbc2083493f" />
+          <SpotifyEmbed spotifyUrl="https://open.spotify.com/track/4ly9rdCe3PvcYZdAN72T3b?si=d97704d1f4934bba" />
         </div>
       </div>
     </div>
